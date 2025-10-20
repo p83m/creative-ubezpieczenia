@@ -27,7 +27,9 @@ const Navigation = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${
-        isScrolled ? "glass-effect shadow-medium" : "bg-transparent"
+        isScrolled 
+          ? "bg-background shadow-strong border-b border-border" 
+          : "bg-background/95 backdrop-blur-lg shadow-medium border-b border-border/50"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -81,7 +83,7 @@ const Navigation = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 animate-slide-up glass-effect rounded-lg my-2">
+          <div className="lg:hidden py-4 animate-slide-up bg-background rounded-lg my-2 shadow-strong border border-border">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
                 <a
