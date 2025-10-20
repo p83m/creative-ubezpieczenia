@@ -34,20 +34,55 @@ const ReviewsSection = () => {
       text: "Kompleksowe ubezpieczenie dla mojej restauracji w świetnej cenie. Polecam ubezpieczhurtowo.pl!",
       date: "1 tydzień temu",
     },
+    {
+      name: "Katarzyna Lewandowska",
+      role: "Klient indywidualny",
+      rating: 5,
+      text: "Bardzo pomocni i cierpliwi. Odpowiedzieli na wszystkie moje pytania i pomogli wybrać najlepszą opcję.",
+      date: "5 dni temu",
+    },
+    {
+      name: "Tomasz Zieliński",
+      role: "Manager IT",
+      rating: 5,
+      text: "Szybka wycena online i profesjonalna realizacja. Wszystko odbyło się bez wychodzenia z domu!",
+      date: "2 tygodnie temu",
+    },
+    {
+      name: "Magdalena Sikora",
+      role: "Właścicielka salonu fryzjerskiego",
+      rating: 5,
+      text: "Wreszcie znalazłam ubezpieczenia dopasowane do potrzeb mojego biznesu. Świetna obsługa!",
+      date: "3 tygodnie temu",
+    },
+    {
+      name: "Paweł Dąbrowski",
+      role: "Klient indywidualny",
+      rating: 5,
+      text: "Polecam! Uczciwe podejście, przejrzyste warunki i konkurencyjne ceny. Jestem bardzo zadowolony.",
+      date: "1 tydzień temu",
+    },
   ];
 
+  const itemsPerPage = 4;
+  const maxIndex = Math.max(0, reviews.length - itemsPerPage);
+
   const nextReview = () => {
-    setCurrentIndex((prev) => (prev + 1) % reviews.length);
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
   const prevReview = () => {
-    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
   useEffect(() => {
-    const timer = setInterval(nextReview, 5000);
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [maxIndex]);
+
+  const visibleReviews = reviews.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
     <section id="reviews" className="py-20 md:py-32 bg-muted/30 overflow-hidden">
@@ -62,81 +97,81 @@ const ReviewsSection = () => {
           </p>
         </div>
 
-        {/* Carousel */}
-        <div className="max-w-4xl mx-auto relative">
-          <div className="relative bg-card rounded-3xl shadow-strong p-8 md:p-12">
-            {/* Quote Icon */}
-            <div className="absolute top-8 right-8 opacity-10">
-              <Quote className="w-24 h-24 text-primary" />
-            </div>
-
-            {/* Stars */}
-            <div className="flex justify-center mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-6 h-6 ${
-                    i < reviews[currentIndex].rating
-                      ? "fill-accent text-accent"
-                      : "text-muted"
-                  }`}
-                />
-              ))}
-            </div>
-
-            {/* Review Text */}
-            <blockquote className="text-xl md:text-2xl text-center text-foreground mb-8 font-medium leading-relaxed min-h-[120px] flex items-center justify-center">
-              "{reviews[currentIndex].text}"
-            </blockquote>
-
-            {/* Author */}
-            <div className="text-center">
-              <div className="font-bold text-primary text-lg">
-                {reviews[currentIndex].name}
-              </div>
-              <div className="text-muted-foreground text-sm">
-                {reviews[currentIndex].role}
-              </div>
-              <div className="text-muted-foreground text-xs mt-1">
-                {reviews[currentIndex].date}
-              </div>
-            </div>
-
-            {/* Navigation Arrows */}
-            <div className="flex justify-center items-center space-x-4 mt-8">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={prevReview}
-                className="rounded-full hover:gradient-primary hover:text-primary-foreground hover:border-transparent transition-smooth"
+        {/* Reviews Grid with Carousel */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {visibleReviews.map((review, index) => (
+              <div
+                key={currentIndex + index}
+                className="bg-card rounded-2xl shadow-soft p-6 hover:shadow-medium transition-smooth animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
+                {/* Quote Icon */}
+                <div className="mb-4">
+                  <Quote className="w-8 h-8 text-primary/20" />
+                </div>
 
-              {/* Dots */}
-              <div className="flex space-x-2">
-                {reviews.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-smooth ${
-                      index === currentIndex
-                        ? "bg-primary w-8"
-                        : "bg-muted hover:bg-muted-foreground"
-                    }`}
-                  />
-                ))}
+                {/* Stars */}
+                <div className="flex mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < review.rating ? "fill-accent text-accent" : "text-muted"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <blockquote className="text-sm text-foreground mb-6 leading-relaxed min-h-[100px]">
+                  "{review.text}"
+                </blockquote>
+
+                {/* Author */}
+                <div className="border-t border-border pt-4">
+                  <div className="font-bold text-primary text-sm">
+                    {review.name}
+                  </div>
+                  <div className="text-muted-foreground text-xs">
+                    {review.role}
+                  </div>
+                  <div className="text-muted-foreground text-xs mt-1">
+                    {review.date}
+                  </div>
+                </div>
               </div>
+            ))}
+          </div>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={nextReview}
-                className="rounded-full hover:gradient-primary hover:text-primary-foreground hover:border-transparent transition-smooth"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </Button>
+          {/* Navigation Controls */}
+          <div className="flex justify-center items-center space-x-4">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={prevReview}
+              disabled={currentIndex === 0}
+              className="rounded-full disabled:opacity-30"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+
+            {/* Progress Indicator */}
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-muted-foreground">
+                {currentIndex + 1} - {Math.min(currentIndex + itemsPerPage, reviews.length)} z {reviews.length}
+              </span>
             </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={nextReview}
+              disabled={currentIndex >= maxIndex}
+              className="rounded-full disabled:opacity-30"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </Button>
           </div>
 
           {/* Google Reviews Badge */}
