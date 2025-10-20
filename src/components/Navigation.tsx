@@ -35,7 +35,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center space-x-2">
+          <a href="#home" className="flex items-center space-x-2 shrink-0">
             <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-xl">U</span>
             </div>
@@ -47,23 +47,22 @@ const Navigation = () => {
             </div>
           </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex flex-1 items-center justify-center min-w-0 gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-smooth relative group"
+                className="inline-flex items-center h-10 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-smooth relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+                <span className="pointer-events-none absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
               </a>
             ))}
           </div>
 
           {/* Contact Info & CTA */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <a href="tel:+48123456789" className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-smooth">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-4 shrink-0">
+            <a href="tel:+48123456789" className="hidden xl:flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-smooth">
               <Phone className="w-4 h-4" />
               <span>+48 123 456 789</span>
             </a>
